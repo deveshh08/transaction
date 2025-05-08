@@ -16,7 +16,7 @@ def create_tables():
     with app.app_context():
         db.create_all()
 
-@app.route('/purchase-plan', methods=['POST'])
+
 import re
 
 @app.route('/purchase-plan', methods=['POST'])
