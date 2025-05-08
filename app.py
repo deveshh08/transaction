@@ -4,12 +4,9 @@ from models import db, Plan
 
 app = Flask(__name__)
 
-# Use PostgreSQL URI from environment variable
-db_url = os.getenv("DATABASE_URL")
-if db_url and db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://auth_db_24g7_user:aYSW6NK6OimiOnOBKqOI470dc2oGNeQ3@dpg-d08tlp1r0fns73dpsn90-a.oregon-postgres.render.com/auth_db_24g7_ehtf'
 
-app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
