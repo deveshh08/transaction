@@ -17,31 +17,25 @@ def create_tables():
         db.create_all()
 
 
-import re
+
 
 @app.route('/purchase-plan', methods=['POST'])
 def purchase_plan():
     data = request.get_json()
 
-    required_fields = ["email", "plan_name", "plan_price", "expiration_date", "plan_duration", "purchase_date", "purchase_time"]
+    required_fields = [
+        "email", "plan_name", "plan_price",
+        "expiration_date", "plan_duration",
+        "purchase_date", "purchase_time"
+    ]
+
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing fields in request"}), 400
-
-    # Extract numeric price from string (e.g., ₹499.99 → 499.99)
-    raw_price = data['plan_price']
-    match = re.search(r"[\d,.]+", raw_price)
-    if not match:
-        return jsonify({"error": "Invalid price format"}), 400
-
-    try:
-        price = float(match.group().replace(',', ''))
-    except ValueError:
-        return jsonify({"error": "Price conversion failed"}), 400
 
     plan = Plan(
         email=data['email'],
         plan_name=data['plan_name'],
-        plan_price=price,
+        plan_price=data['plan_price'],  # Store full string with currency symbol
         expiration_date=data['expiration_date'],
         plan_duration=data['plan_duration'],
         purchase_date=data['purchase_date'],
@@ -52,6 +46,7 @@ def purchase_plan():
     db.session.commit()
 
     return jsonify({"message": "Plan purchased successfully"}), 201
+
 
 
 
